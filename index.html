@@ -30,6 +30,24 @@
                         <span id="texto_precio"></span>
                         <span id="precio_final"></span -->
                     </div>
+                    <div>
+                        Fecha: <input id="fecha" type="date" name="fecha" value="2024-11-03" />
+                        Hora inicial <input id="h1" type="time" name="h1" value="09:11" />
+                        Hora final <input id="h2" type="time" name="h2" value="13:44" />
+                        <button id="add" onclick="adicionar()">+</button>
+                        <!-- span id="calculo_horas"></span>
+                        <span id="texto_precio"></span>
+                        <span id="precio_final"></span -->
+                    </div>
+                    <div>
+                        Fecha: <input id="fecha" type="date" name="fecha" value="2024-11-04" />
+                        Hora inicial <input id="h1" type="time" name="h1" value="08:45" />
+                        Hora final <input id="h2" type="time" name="h2" value="14:54" />
+                        <button id="add" onclick="adicionar()">+</button>
+                        <!-- span id="calculo_horas"></span>
+                        <span id="texto_precio"></span>
+                        <span id="precio_final"></span -->
+                    </div>
                 </div>
                 <div id="cobro"></div>
                 <button type="submit">Calcular</button>
@@ -83,7 +101,6 @@
             return parseFloat(acum_cobro)
         }
 
-
         // calcular al enviar el formulario (submit) y se toman todos los input
         // en un arrgeglo pero no coge bien las fechas para calcular la diferencia
         // entre la hora final - hora final
@@ -98,9 +115,11 @@
             console.log('precio enviado es: ', precio)
 
             // tomar el elemento con id='fechas'
-            divFechas = document.getElementById('fechas') 
+            divFechas = document.getElementById('fechas')
+
             // coger todos los elementos con etiquetas input
             allInputs = divFechas.getElementsByTagName('input')
+
             // allInputs = document.getElementById('fechas')
             console.log('tamaño de todos los inputs', allInputs.length)
 
@@ -123,18 +142,21 @@
                         fecha = new Date((allInputs[i].value).split('-'))
                         fecha.toLocaleString("es-MX", {timeZone: "America/Havana"})
                         fechas.push(fecha)
+                        break
                     case 'h1':
                         hora_1 = allInputs[i].value
                         // hora_11 = newDate(fecha, hora_1)
                         horA = hora_1.split(':');
                         hora1.push(horA)
                         console.log('hora 1: ', hora_1)
+                        break
                     case 'h2':
                         hora_2 = allInputs[i].value
                         // hora_11 = newDate(fecha, hora_1)
                         horB = hora_2.split(':');
                         hora2.push(horB)
                         console.log('hora 2: ', hora_2)
+                        break
                 }
             }
 
@@ -185,9 +207,9 @@
         
         // función para convertir los string 'fecha' y 'hora' en formato fecha
         function newDate(date, hora) {
-            console.log('---- llegó a newDate: date: ', date, ' y llegó de hora: ', hora)
+            // console.log('---- llegó a newDate: date: ', date, ' y llegó de hora: ', hora)
             let horA = hora.split(':');
-            console.log('dentro de newDate: la hora se convirtió en: ', horA)
+            // console.log('dentro de newDate: la hora se convirtió en: ', horA)
             date.setHours(horA[0]);
             date.setMinutes(horA[1]);
             console.log('--- saldrá de newDate: ', date)
@@ -202,8 +224,16 @@
             event.preventDefault()
 
             // coger todos los elementos con etiquetas input
-            allInputs = document.getElementsByTagName('input')
-            console.log('el div con nombre: fechas: ', allInputs)
+            // allInputs = document.getElementsByTagName('input')
+
+            // coger el precio
+            precio = parseFloat(document.getElementById('precio').textContent)
+
+            fe = document.getElementById('fechas')
+            // crear un array con todos los input
+            allInputs = [...fe.getElementsByTagName('input')]
+            
+            // console.log('el div con nombre: fechas: ', allInputs)
 
             // inicializando variables
             fechas = []
@@ -213,44 +243,72 @@
             hora11 = new Date
             hora12 = new Date
 
+            // probando forEach
+            allInputs.forEach((i) => {
+                switch(i.name) {
+                    case('fecha'):
+                        // console.log(`es un input de name fecha, cuyo valor es: ${i.value}`)
+                        // fecha = i.value
+                        fecha = new Date((i.value).split('-'))
+                        break
+                    case('h1'):
+                        console.log(`es un input de name h1, cuyo valor es: ${i.value}`)
+                        hora1.push(newDate(fecha, i.value))
+                        // hora1.push(i.value)
+                        break
+                    case('h2'):
+                        console.log(`es un input de name h2, cuyo valor es: ${i.value}`)
+                        hora2.push(newDate(fecha, i.value))
+                        break
+
+                }
+            })
+
+            // for(i=0;i<hora1.length;i++) {
+            //     console.log(`debes restar h2: ${hora2[i]} - h1: ${hora1[i]}`)
+            // }
+            hora1.forEach((h, i) => {
+                rest = hora2[i] - hora1[i]
+                console.log(`debes restar h2: ${hora2[i]} - h1: ${hora1[i]} = ${rest}`)
+            })
             // iterando por todos los input recogidos
-            for(i=0;i<allInputs.length;i++){
-                console.log('dentro del for, valor: ', allInputs[i].value)
+            // for(i=0;i<allInputs.length;i++){
+            //     console.log('dentro del for, valor: ', allInputs[i].value)
 
 
-                if(allInputs[i].name == 'precio') {
-                    console.log('el nombre del input es: precio')
-                    precio = allInputs[i].value
-                    console.log('el valor de precio: ', precio)
-                }
-                if(allInputs[i].name == 'fecha') {
-                    console.log('el nombre del input es: fecha')
-                    console.log('el valor de fecha: ', allInputs[i].value)
-                    fecha = new Date((allInputs[i].value).split('-'))
-                    fecha.toLocaleString("es-MX", {timeZone: "America/Havana"})
-                    console.log('valor de la fecha a registrar en el arreglo fecha: ', fecha)
-                    fechas.push(fecha)
-                }
-                if(allInputs[i].name == 'h1') {
-                    console.log('el nombre del input es: h1')
-                    hora_1 = allInputs[i].value
-                    hora_11 = newDate(fecha, hora_1)
-                    hora1.push(hora_11)
-                    console.log('hora 1: ', hora_11)
-                }
-                if(allInputs[i].name == 'h2') {
-                    console.log('el nombre del input es: h2')
-                    hora_2 = allInputs[i].value
-                    hora_22 = newDate(fecha, hora_2)
-                    hora2.push(hora_22)
-                    console.log('hora 2: ', hora_22)
-                }
-            }
+            //     if(allInputs[i].name == 'precio') {
+            //         console.log('el nombre del input es: precio')
+            //         precio = allInputs[i].value
+            //         console.log('el valor de precio: ', precio)
+            //     }
+            //     if(allInputs[i].name == 'fecha') {
+            //         console.log('el nombre del input es: fecha')
+            //         console.log('el valor de fecha: ', allInputs[i].value)
+            //         fecha = new Date((allInputs[i].value).split('-'))
+            //         fecha.toLocaleString("es-MX", {timeZone: "America/Havana"})
+            //         console.log('valor de la fecha a registrar en el arreglo fecha: ', fecha)
+            //         fechas.push(fecha)
+            //     }
+            //     if(allInputs[i].name == 'h1') {
+            //         console.log('el nombre del input es: h1')
+            //         hora_1 = allInputs[i].value
+            //         hora_11 = newDate(fecha, hora_1)
+            //         hora1.push(hora_11)
+            //         console.log('hora 1: ', hora_11)
+            //     }
+            //     if(allInputs[i].name == 'h2') {
+            //         console.log('el nombre del input es: h2')
+            //         hora_2 = allInputs[i].value
+            //         hora_22 = newDate(fecha, hora_2)
+            //         hora2.push(hora_22)
+            //         console.log('hora 2: ', hora_22)
+            //     }
+            // }
             
             console.log('-------- salí del for, resultado de los arreglos --------- ')
             // console.log('las fechas: ', fechas)
-            // console.log('las hora1: ', hora1)
-            // console.log('las hora2: ', hora2)
+            console.log('las hora1: ', hora1)
+            console.log('las hora2: ', hora2)
             console.log('calculo tiene: ', calculo)
         }
     
