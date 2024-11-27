@@ -23,7 +23,7 @@
                             <div class="mb-3 col-md-3 ">
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
-                                    <input class="form-control" id="precio" type="number" name="precio" min="0.00" max="10000.00" step="0.01" placeholder="144.00">
+                                    <input class="form-control" id="precio" type="number" name="precio" min="0.00" max="10000.00" step="0.01" placeholder="144.00" required>
                                 </div>
                             </div>
                         </div>
@@ -33,7 +33,7 @@
                                     <div class="row">
                                         <label for="inputDate1" class="col-sm-2 col-form-label">Fecha:</label>
                                         <div class="col-sm-8">
-                                            <input class="form-control" type="date" name="fecha" value="2024-11-02" for="inputDate1" />
+                                            <input class="form-control" type="date" name="fecha" value="2024-11-02" for="inputDate1" required />
                                         </div>
                                     </div>
                                 </div>
@@ -41,7 +41,7 @@
                                     <div class="row">
                                         <label for="inputDate1" class="col-sm-4 col-form-label">Hora inicial:</label>
                                         <div class="col-sm-4">
-                                            <input class="form-control" type="time" name="hora_inicial" value="08:23" />
+                                            <input class="form-control" type="time" name="hora_inicial" value="08:23" required />
                                         </div>
                                     </div>
                                 </div>
@@ -49,7 +49,7 @@
                                     <div class="row">
                                         <label for="inputDate1" class="col-sm-4 col-form-label">Hora final:</label> 
                                         <div class="col-sm-4">
-                                            <input class="form-control" type="time" name="hora_final" value="14:34" />
+                                            <input class="form-control" type="time" name="hora_final" value="14:34" required />
                                         </div>  
                                     </div>
                                 </div>
@@ -64,13 +64,13 @@
                 <div>
                     <table class="table table-striped visually-hidden" id="tabla">
                         <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Horas</th>
-                                <th>a Cobrar</th>
+                            <tr class="">
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Horas</th>
+                                <th scope="col">a Cobrar</th>
                             </tr>
                         </thead>
-                        <tbody id="cobro">
+                        <tbody id="cobro" class="table-group-divider">
                             <tr>
                                 <td></td>
                                 <td></td>
@@ -93,7 +93,7 @@
                                 <div class="row"> \
                                     <label for="inputDate1" class="col-sm-2 col-form-label">Fecha:</label> \
                                     <div class="col-sm-8"> \
-                                        <input class="form-control" type="date" name="fecha" value="2024-11-02" for="inputDate1" /> \
+                                        <input class="form-control" type="date" name="fecha" value="2024-11-02" for="inputDate1" required /> \
                                     </div> \
                                 </div> \
                             </div> \
@@ -101,7 +101,7 @@
                                 <div class="row"> \
                                     <label for="inputDate1" class="col-sm-4 col-form-label">Hora inicial:</label> \
                                     <div class="col-sm-4">\
-                                        <input class="form-control" type="time" name="hora_inicial" value="08:23" /> \
+                                        <input class="form-control" type="time" name="hora_inicial" value="08:23" required /> \
                                     </div>\
                                 </div> \
                             </div> \
@@ -109,7 +109,7 @@
                                 <div class="row"> \
                                     <label for="inputDate1" class="col-sm-4 col-form-label">Hora final:</label> \
                                     <div class="col-sm-4"> \
-                                        <input class="form-control" type="time" name="hora_final" value="14:34" /> \
+                                        <input class="form-control" type="time" name="hora_final" value="14:34" required /> \
                                     </div>  \
                                 </div> \
                             </div> \
@@ -225,18 +225,20 @@
 
                 // ir sumando los precios parciales
                 suma_final_precio = suma(suma_final_precio, precio_parcial[i])
+                console.log(`debes restar horas_finales: ${horas_finales[i]} - horas_iniciales: ${horas_iniciales[i]} = ${resta_horas}, multi por el precio ${precio}`)
 
-                // generar el texto a mostrar
-                nuevo_div.innerHTML = `<td>${fecha_a_mostrar}</td><td>${resta_horas.toFixed(2)}</td><td>$ ${precio_parcial[i].toFixed(2)}</td>`
+                precio_parcial_formateado = new Intl.NumberFormat("en-US").format(precio_parcial[i])
+
+                // generar el texto a mostrar, ${precio_parcial[i].toFixed(2)}
+                nuevo_div.innerHTML = `<td>${fecha_a_mostrar}</td><td>${resta_horas.toFixed(2)}</td><td>$ ${precio_parcial_formateado}</td>`
 
                 // mostrar el texto
                 cobro.appendChild(nuevo_div.cloneNode(true))
                 cobro.classList.remove('visually-hidden')
-                // console.log(`debes restar horas_finales: ${horas_finales[i]} - horas_iniciales: ${horas_iniciales[i]} = ${resta_horas}, multi por el precio ${precio}`)
             })
             
             // agregar el precio total
-            nuevo_div.innerHTML = `<td colspan='3' class='text-end'>a cobrar: <b>$ ${suma_final_precio}</b></td>`
+            nuevo_div.innerHTML = `<td colspan='3' class='text-end'>Total a cobrar: <b>$ ${suma_final_precio}</b></td>`
             cobro.appendChild(nuevo_div.cloneNode(true))
 
             tabla.classList.remove('visually-hidden')
