@@ -1,75 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cálculo de minutos</title>
-    <meta name="description" content="Cálculo de minutos para calcular el precio a cobrar">
-    <meta name="author" content="Michel Vega Fuenzalida michelvf@nauta.cu">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
-</head>
-<h2>Cálculo del Precio por fechas</h2>
-<div>
-    <div>
-        <h3>Fechas</h3>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cálculo de minutos</title>
+        <meta name="description" content="Cálculo de minutos para calcular el precio a cobrar">
+        <meta name="author" content="Michel Vega Fuenzalida michelvf@nauta.cu">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    </head>
+    <body>
+        <h2>Cálculo del Precio por fechas</h2>
         <div>
-            <!-- form id="form" onsubmit="calcular2()" method="post" -->
-            <form id="form" method="post" onsubmit="calcular()">
+            <div>
+                <h3>Fechas</h3>
                 <div>
-                    ¿Cuanto se va a cobrar por horas?
-                    $ <input value="195.00" id="precio" type="number" name="precio"  min="0.00" max="10000.00" step="0.01" placeholder="144.00">
+                    <!-- form id="form" onsubmit="calcular2()" method="post" -->
+                    <form id="form" method="post" onsubmit="calcular()">
+                        <div>
+                            ¿Cuanto se va a cobrar por horas?
+                            $ <input value="195.00" id="precio" type="number" name="precio"  min="0.00" max="10000.00" step="0.01" placeholder="144.00">
+                        </div>
+                        <div id="fechas">
+                            <div>
+                                Fecha: <input type="date" name="fecha" value="2024-11-02" />
+                                Hora inicial <input type="time" name="hora_inicial" value="08:23" />
+                                Hora final <input type="time" name="hora_final" value="14:34" />
+                                <button id="add" onclick="adicionar()">+</button>
+                            </div>
+                        </div>
+                        <button type="submit">Calcular</button>
+                    </form>
                 </div>
-                <div id="fechas">
-                    <div>
-                        Fecha: <input id="fecha" type="date" name="fecha" value="2024-11-02" />
-                        Hora inicial <input id="h1" type="time" name="h1" value="08:23" />
-                        Hora final <input id="h2" type="time" name="h2" value="14:34" />
-                        <button id="add" onclick="adicionar()">+</button>
-                        <!-- span id="calculo_horas"></span>
-                        <span id="texto_precio"></span>
-                        <span id="precio_final"></span -->
-                    </div>
-                    <div>
-                        Fecha: <input id="fecha" type="date" name="fecha" value="2024-11-03" />
-                        Hora inicial <input id="h1" type="time" name="h1" value="09:11" />
-                        Hora final <input id="h2" type="time" name="h2" value="13:44" />
-                        <button id="add" onclick="adicionar()">+</button>
-                        <!-- span id="calculo_horas"></span>
-                        <span id="texto_precio"></span>
-                        <span id="precio_final"></span -->
-                    </div>
-                    <div>
-                        Fecha: <input id="fecha" type="date" name="fecha" value="2024-11-04" />
-                        Hora inicial <input id="h1" type="time" name="h1" value="08:45" />
-                        Hora final <input id="h2" type="time" name="h2" value="14:54" />
-                        <button id="add" onclick="adicionar()">+</button>
-                        <!-- span id="calculo_horas"></span>
-                        <span id="texto_precio"></span>
-                        <span id="precio_final"></span -->
-                    </div>
-                </div>
+                <br />
                 <div id="cobro"></div>
-                <button type="submit">Calcular</button>
-            </form>
+            </div>
         </div>
-    </div>
-</div>
-<body>
+    <body>
     <script>
 
         // Función para agregar otro input usando una plantilla
         function adicionar() {
-            // calcular2()
 
             // Plantilla a agregar
             input = 'Fecha: <input id="fecha" type="date" name="fecha" " /> \
-                Hora inicial <input id="h1" type="time" name="h1" /> \
-                Hora final <input id="h2" type="time" name="h2" /> \
-                <button id="add" onclick="adicionar()">+</button> \
-                <!-- span id="calculo_horas"></span> \
-                <span id="texto_precio"></span> \
-                <span id="precio_final"></span -->'
+                Hora inicial <input id="h1" type="time" name="hora_inicial" /> \
+                Hora final <input id="h2" type="time" name="hora_final" /> \
+                <button id="add" onclick="adicionar()">+</button>'
             
             // borrar el botón con el signo de '+'
             document.getElementById('add').remove();
@@ -87,135 +64,22 @@
             additionalInputs.appendChild(newDiv);
         }
 
-        // función para tomar el valor del elemento con id='cobro' que es el que va acumulando
-        // el total a pagar.
-        function cobro() {
-
-            // tomar el elemento con id='cobro'
-            cobrar = document.getElementById('cobro')
-
-            // condicional ternario por si el elemento con id='cobro' tiene valor o no
-            acum_cobro = cobrar.textoContext == undefined ? 0 : cobrar.textoContext
-
-            // retornar un valor float
-            return parseFloat(acum_cobro)
-        }
-
-        // calcular al enviar el formulario (submit) y se toman todos los input
-        // en un arrgeglo pero no coge bien las fechas para calcular la diferencia
-        // entre la hora final - hora final
-        function calcular3() {
-            
-            // detener los eventos por defecto al enviar el formulario
-            event.preventDefault()
-
-            // tomar el precio enviado y convertirlo a flotante
-            //precio = parseFloat(document.getElementById('precio').textContent)
-            precio = parseFloat(document.getElementById('precio').value)
-            console.log('precio enviado es: ', precio)
-
-            // tomar el elemento con id='fechas'
-            divFechas = document.getElementById('fechas')
-
-            // coger todos los elementos con etiquetas input
-            allInputs = divFechas.getElementsByTagName('input')
-
-            // allInputs = document.getElementById('fechas')
-            console.log('tamaño de todos los inputs', allInputs.length)
-
-            // inicializando variables
-            fechas = []
-            hora1 = []
-            hora2 = []
-            calculo = []
-            hora11 = new Date
-            hora12 = new Date
-            horA = []
-            horB = []
-
-            for(i=0;i<allInputs.length;i++){
-                console.log('dentro del for, valor: ', allInputs[i].value, 'valor de i: ',i)
-                name = allInputs[i].name
-
-                switch(name) {
-                    case 'fecha':
-                        fecha = new Date((allInputs[i].value).split('-'))
-                        fecha.toLocaleString("es-MX", {timeZone: "America/Havana"})
-                        fechas.push(fecha)
-                        break
-                    case 'h1':
-                        hora_1 = allInputs[i].value
-                        // hora_11 = newDate(fecha, hora_1)
-                        horA = hora_1.split(':');
-                        hora1.push(horA)
-                        console.log('hora 1: ', hora_1)
-                        break
-                    case 'h2':
-                        hora_2 = allInputs[i].value
-                        // hora_11 = newDate(fecha, hora_1)
-                        horB = hora_2.split(':');
-                        hora2.push(horB)
-                        console.log('hora 2: ', hora_2)
-                        break
-                }
-            }
-
-        }
-        
-        // calcular mientras se va agregando horas haciendo click al signo de +
-        function calcular2() {
-            // event.preventDefault()
-            span_cobrar = document.getElementById('cobro')
-            //cobro_f = cobro()
-            texto_precio = document.getElementById('texto_precio')
-            precio = document.getElementById('precio')
-            h1 = document.getElementById('h1')
-            h2 = document.getElementById('h2')
-            hora1 = (h1.value + ":00").split(":")
-            hora2 = (h2.value + ":00").split(":")
-            
-            t1 = new Date(),
-            t2 = new Date();
-            
-            t2.setHours(hora1[0], hora1[1], hora1[2]);
-            t1.setHours(hora2[0], hora2[1], hora2[2]);
-            
-            //Aquí hago la resta
-            t1.setHours(t1.getHours() - t2.getHours(), t1.getMinutes() - t2.getMinutes(), t1.getSeconds() - t2.getSeconds());
-            t1_show = t1.getHours() + "h:" + t1.getMinutes() + "s, "
-            calculo_h = document.getElementById('calculo_horas')
-            precio_final = document.getElementById('precio_final')
-            
-            calculo_h.innerHTML = "tiempo: " + t1_show
-            precioF = ((t1.getHours() * 60) + t1.getMinutes()) * parseFloat(precio.value)
-            texto_precio.innerHTML = " Precio: $ "
-            precio_final.innerHTML = precioF
-
-            // console.log("vine el cobro: ", cobro_f, " el precio calculado: ", precioF)
-            cobro = precioF //+ cobro_f
-            // fecha.setAttribute("id", "f1");
-            h1.setAttribute("id", "ho1");
-            h2.setAttribute("id", "ho2");
-            calculo_h.setAttribute("id", "ch");
-            precio_final.setAttribute("id", "pf");
-            texto_precio.setAttribute("id", "tp")
-            span_cobrar.innerHTML = cobro
-            
-            // console.log('valor de la hora1: ', hora1, ' de la hora2: ', hora2)
-            // console.log('el cálculo es: ', t1.getHours(), ':', t1.getMinutes())
-        }
-        
         // función para convertir los string 'fecha' y 'hora' en formato fecha
         function newDate(date, hora) {
             // console.log('---- llegó a newDate: date: ', date, ' y llegó de hora: ', hora)
-            let horA = hora.split(':');
+            const hora_separada = hora.split(':');
             // console.log('dentro de newDate: la hora se convirtió en: ', horA)
-            date.setHours(horA[0]);
-            date.setMinutes(horA[1]);
-            console.log('--- saldrá de newDate: ', date)
+            date.setHours(hora_separada[0]);
+            date.setMinutes(hora_separada[1]);
+            // console.log('--- saldrá de newDate: ', date)
             return date;
         }
         
+        // funcion para ir sumando los precios parciales y llegar el total a cobrar
+        function suma(suma, precio_parcial) {
+            return suma + precio_parcial
+        }
+
         // calcular al enviar el forumario (submit), coge todos los input y los va iterando
         // tomando su valor y haciendo condiciones
         function calcular() {
@@ -224,92 +88,94 @@
             event.preventDefault()
 
             // coger todos los elementos con etiquetas input
-            // allInputs = document.getElementsByTagName('input')
+            cobro = document.getElementById('cobro')
+
+            while (cobro.firstChild) {
+                cobro.removeChild(cobro.firstChild);
+            }
 
             // coger el precio
-            precio = parseFloat(document.getElementById('precio').textContent)
+            const precio = document.getElementById('precio').value
 
-            fe = document.getElementById('fechas')
-            // crear un array con todos los input
-            allInputs = [...fe.getElementsByTagName('input')]
+            // tomar el div con id fechas
+            const div_fechas = document.getElementById('fechas')
+
+            // crear un array con todos los input que están en el div fechas
+            const allInputs = [...div_fechas.getElementsByTagName('input')]
             
-            // console.log('el div con nombre: fechas: ', allInputs)
-
             // inicializando variables
-            fechas = []
-            hora1 = []
-            hora2 = []
-            calculo = []
-            hora11 = new Date
-            hora12 = new Date
+            let fechas = []
+            horas_iniciales = []
+            horas_finales = []
+            precio_parcial = []
+            suma_final_precio = 0
+            hora_inicial_formato_fecha = new Date
+            hora_final_formato_fecha = new Date
 
-            // probando forEach
-            allInputs.forEach((i) => {
-                switch(i.name) {
-                    case('fecha'):
+            // iterar por todos los input e ir identificando por el atributo name 
+            // para formatear su valor y tomarlo en su arreglo correspondiente
+            allInputs.forEach((el_input) => {
+                switch (el_input.name) {
+                    case ('fecha'):
                         // console.log(`es un input de name fecha, cuyo valor es: ${i.value}`)
-                        // fecha = i.value
-                        fecha = new Date((i.value).split('-'))
+                        fecha = new Date((el_input.value).split('-'))
+                        fecha.toLocaleString("es-MX", {timeZone: "America/Havana"})
+                        fechas.push(fecha)
                         break
-                    case('h1'):
-                        console.log(`es un input de name h1, cuyo valor es: ${i.value}`)
-                        hora1.push(newDate(fecha, i.value))
-                        // hora1.push(i.value)
+                    case ('hora_inicial'):
+                        // console.log(`es un input de name hora_inicial, cuyo valor es: ${el_input.value}`)
+                        hora_inicial_formato_fecha = newDate(fecha, el_input.value)
+                        horas_iniciales.push(hora_inicial_formato_fecha.getTime())
                         break
-                    case('h2'):
-                        console.log(`es un input de name h2, cuyo valor es: ${i.value}`)
-                        hora2.push(newDate(fecha, i.value))
+                    case ('hora_final'):
+                        // console.log(`es un input de name hora_final, cuyo valor es: ${el_input.value}`)
+                        hora_final_formato_fecha = newDate(fecha, el_input.value)
+                        horas_finales.push(hora_final_formato_fecha.getTime())
                         break
-
                 }
             })
 
-            // for(i=0;i<hora1.length;i++) {
-            //     console.log(`debes restar h2: ${hora2[i]} - h1: ${hora1[i]}`)
-            // }
-            hora1.forEach((h, i) => {
-                rest = hora2[i] - hora1[i]
-                console.log(`debes restar h2: ${hora2[i]} - h1: ${hora1[i]} = ${rest}`)
+            // crear un div para mostrar los cálculos por fechas
+            nuevo_div = document.createElement('div')
+
+            // iterar por las fechas iniciales para calcular y agregar el resultado
+            // para mostrarlo
+            horas_iniciales.forEach((h, i) => {
+
+                // se calculan las horas trabajadas
+                resta_horas = (horas_finales[i] - h) / 1000 / 60 / 60
+
+                // de la fecha se separan dia, mes y año para formar dd/mm/yyyy
+                const dia = fechas[i].getDate()
+                const mes = fechas[i].getMonth() + 1
+                const anno = fechas[i].getFullYear()
+                const fecha_a_mostrar = `${dia}/${mes}/${anno}`
+
+                // cálculo del precio parcial
+                precio_parcial[i] = resta_horas * precio
+                // console.log(`el día: ${fecha_a_mostrar}, se trabajó: ${resta_horas.toFixed(2)} horas, a cobrar: $ ${precio_parcial[i].toFixed(2)}`)
+
+                // ir sumando los precios parciales
+                suma_final_precio = suma(suma_final_precio, precio_parcial[i])
+
+                // generar el texto a mostrar
+                nuevo_div.innerHTML = `${fecha_a_mostrar}, se trabajó: ${resta_horas.toFixed(2)} horas, a cobrar: $ ${precio_parcial[i].toFixed(2)}`
+
+                // mostrar el texto
+                cobro.appendChild(nuevo_div.cloneNode(true))
+                // console.log(`debes restar horas_finales: ${horas_finales[i]} - horas_iniciales: ${horas_iniciales[i]} = ${resta_horas}, multi por el precio ${precio}`)
             })
-            // iterando por todos los input recogidos
-            // for(i=0;i<allInputs.length;i++){
-            //     console.log('dentro del for, valor: ', allInputs[i].value)
-
-
-            //     if(allInputs[i].name == 'precio') {
-            //         console.log('el nombre del input es: precio')
-            //         precio = allInputs[i].value
-            //         console.log('el valor de precio: ', precio)
-            //     }
-            //     if(allInputs[i].name == 'fecha') {
-            //         console.log('el nombre del input es: fecha')
-            //         console.log('el valor de fecha: ', allInputs[i].value)
-            //         fecha = new Date((allInputs[i].value).split('-'))
-            //         fecha.toLocaleString("es-MX", {timeZone: "America/Havana"})
-            //         console.log('valor de la fecha a registrar en el arreglo fecha: ', fecha)
-            //         fechas.push(fecha)
-            //     }
-            //     if(allInputs[i].name == 'h1') {
-            //         console.log('el nombre del input es: h1')
-            //         hora_1 = allInputs[i].value
-            //         hora_11 = newDate(fecha, hora_1)
-            //         hora1.push(hora_11)
-            //         console.log('hora 1: ', hora_11)
-            //     }
-            //     if(allInputs[i].name == 'h2') {
-            //         console.log('el nombre del input es: h2')
-            //         hora_2 = allInputs[i].value
-            //         hora_22 = newDate(fecha, hora_2)
-            //         hora2.push(hora_22)
-            //         console.log('hora 2: ', hora_22)
-            //     }
-            // }
             
-            console.log('-------- salí del for, resultado de los arreglos --------- ')
+            // agregar el precio total
+            nuevo_div.innerHTML = `a cobrar: <b>$ ${suma_final_precio}</b>`
+            cobro.appendChild(nuevo_div.cloneNode(true))
+
+            // console.log('-------- salí del for, resultado de los arreglos --------- ')
             // console.log('las fechas: ', fechas)
-            console.log('las hora1: ', hora1)
-            console.log('las hora2: ', hora2)
-            console.log('calculo tiene: ', calculo)
+            // console.log('las horas_iniciales: ', horas_iniciales)
+            // console.log('las horas_finales: ', horas_finales)
+            // console.log('precio parcial tiene: ', precio_parcial)
+            // console.log('a cobrar: $ ', suma_final_precio)
         }
     
     </script>
