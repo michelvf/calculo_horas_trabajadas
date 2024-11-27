@@ -6,10 +6,11 @@
         <title>Cálculo de minutos</title>
         <meta name="description" content="Cálculo de minutos para calcular el precio a cobrar">
         <meta name="author" content="Michel Vega Fuenzalida michelvf@nauta.cu">
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     </head>
     <body>
+        <div class="container">
         <h2>Cálculo del Precio por fechas</h2>
         <div>
             <div>
@@ -17,25 +18,70 @@
                 <div>
                     <!-- form id="form" onsubmit="calcular2()" method="post" -->
                     <form id="form" method="post" onsubmit="calcular()">
-                        <div>
-                            ¿Cuanto se va a cobrar por horas?
-                            $ <input value="195.00" id="precio" type="number" name="precio"  min="0.00" max="10000.00" step="0.01" placeholder="144.00">
-                        </div>
-                        <div id="fechas">
-                            <div>
-                                Fecha: <input type="date" name="fecha" value="2024-11-02" />
-                                Hora inicial <input type="time" name="hora_inicial" value="08:23" />
-                                Hora final <input type="time" name="hora_final" value="14:34" />
-                                <button id="add" onclick="adicionar()">+</button>
+                        <label for="basic-url" class="form-label">¿Cuanto se va a cobrar por horas?</label>
+                        <div class="row g-3">
+                            <div class="mb-3 col-md-3 ">
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input class="form-control" id="precio" type="number" name="precio" min="0.00" max="10000.00" step="0.01" placeholder="144.00">
+                                </div>
                             </div>
                         </div>
-                        <button type="submit">Calcular</button>
+                        <div id="fechas">
+                            <div class="row mb-3">
+                                <div class="col col-sm-3">
+                                    <div class="row">
+                                        <label for="inputDate1" class="col-sm-2 col-form-label">Fecha:</label>
+                                        <div class="col-sm-8">
+                                            <input class="form-control" type="date" name="fecha" value="2024-11-02" for="inputDate1" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col col-sm-3">
+                                    <div class="row">
+                                        <label for="inputDate1" class="col-sm-4 col-form-label">Hora inicial:</label>
+                                        <div class="col-sm-4">
+                                            <input class="form-control" type="time" name="hora_inicial" value="08:23" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col col-sm-3">
+                                    <div class="row">
+                                        <label for="inputDate1" class="col-sm-4 col-form-label">Hora final:</label> 
+                                        <div class="col-sm-4">
+                                            <input class="form-control" type="time" name="hora_final" value="14:34" />
+                                        </div>  
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary col col-md-1" id="add" onclick="adicionar()">+</button>
+                            </div>
+
+                            </div>
+                        <button class="btn btn-primary" type="submit">Calcular</button>
                     </form>
                 </div>
                 <br />
-                <div id="cobro"></div>
+                <div>
+                    <table class="table table-striped visually-hidden" id="tabla">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Horas</th>
+                                <th>a Cobrar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cobro">
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+    </div>
     <body>
     <script>
 
@@ -43,10 +89,32 @@
         function adicionar() {
 
             // Plantilla a agregar
-            input = 'Fecha: <input id="fecha" type="date" name="fecha" " /> \
-                Hora inicial <input id="h1" type="time" name="hora_inicial" /> \
-                Hora final <input id="h2" type="time" name="hora_final" /> \
-                <button id="add" onclick="adicionar()">+</button>'
+            input = '<div class="row mb-3"> <div class="col col-sm-3"> \
+                                <div class="row"> \
+                                    <label for="inputDate1" class="col-sm-2 col-form-label">Fecha:</label> \
+                                    <div class="col-sm-8"> \
+                                        <input class="form-control" type="date" name="fecha" value="2024-11-02" for="inputDate1" /> \
+                                    </div> \
+                                </div> \
+                            </div> \
+                            <div class="col col-sm-3"> \
+                                <div class="row"> \
+                                    <label for="inputDate1" class="col-sm-4 col-form-label">Hora inicial:</label> \
+                                    <div class="col-sm-4">\
+                                        <input class="form-control" type="time" name="hora_inicial" value="08:23" /> \
+                                    </div>\
+                                </div> \
+                            </div> \
+                            <div class="col col-sm-3"> \
+                                <div class="row"> \
+                                    <label for="inputDate1" class="col-sm-4 col-form-label">Hora final:</label> \
+                                    <div class="col-sm-4"> \
+                                        <input class="form-control" type="time" name="hora_final" value="14:34" /> \
+                                    </div>  \
+                                </div> \
+                            </div> \
+                            <button class="btn btn-primary col col-md-1" id="add" onclick="adicionar()">+</button> \
+                        </div></div>'
             
             // borrar el botón con el signo de '+'
             document.getElementById('add').remove();
@@ -136,7 +204,7 @@
             })
 
             // crear un div para mostrar los cálculos por fechas
-            nuevo_div = document.createElement('div')
+            nuevo_div = document.createElement('tr')
 
             // iterar por las fechas iniciales para calcular y agregar el resultado
             // para mostrarlo
@@ -159,17 +227,19 @@
                 suma_final_precio = suma(suma_final_precio, precio_parcial[i])
 
                 // generar el texto a mostrar
-                nuevo_div.innerHTML = `${fecha_a_mostrar}, se trabajó: ${resta_horas.toFixed(2)} horas, a cobrar: $ ${precio_parcial[i].toFixed(2)}`
+                nuevo_div.innerHTML = `<td>${fecha_a_mostrar}</td><td>${resta_horas.toFixed(2)}</td><td>$ ${precio_parcial[i].toFixed(2)}</td>`
 
                 // mostrar el texto
                 cobro.appendChild(nuevo_div.cloneNode(true))
+                cobro.classList.remove('visually-hidden')
                 // console.log(`debes restar horas_finales: ${horas_finales[i]} - horas_iniciales: ${horas_iniciales[i]} = ${resta_horas}, multi por el precio ${precio}`)
             })
             
             // agregar el precio total
-            nuevo_div.innerHTML = `a cobrar: <b>$ ${suma_final_precio}</b>`
+            nuevo_div.innerHTML = `<td colspan='3' class='text-end'>a cobrar: <b>$ ${suma_final_precio}</b></td>`
             cobro.appendChild(nuevo_div.cloneNode(true))
 
+            tabla.classList.remove('visually-hidden')
             // console.log('-------- salí del for, resultado de los arreglos --------- ')
             // console.log('las fechas: ', fechas)
             // console.log('las horas_iniciales: ', horas_iniciales)
