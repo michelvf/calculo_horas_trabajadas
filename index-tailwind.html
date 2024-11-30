@@ -6,75 +6,66 @@
         <title>Cálculo de minutos</title>
         <meta name="description" content="Cálculo de minutos para calcular el precio a cobrar">
         <meta name="author" content="Michel Vega Fuenzalida michelvf@nauta.cu">
-        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <!-- link rel="stylesheet" href="css/style-tailwind.css" -->
+         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     </head>
     <body>
-        <div class="container">
-        <h2>Cálculo del Precio por fechas</h2>
+        <div class="container mx-auto">
+        <h2 class="text-3xl font-bold underline">Cálculo del Precio por fechas</h2>
         <div>
             <div>
                 <h3>Fechas</h3>
                 <div>
                     <!-- form id="form" onsubmit="calcular2()" method="post" -->
-                    <form id="form" method="post" onsubmit="calcular()">
-                        <label for="basic-url" class="form-label">¿Cuanto se va a cobrar por horas?</label>
-                        <div class="row g-3">
-                            <div class="mb-3 col-md-3 ">
-                                <div class="input-group">
-                                    <span class="input-group-text">$</span>
-                                    <input class="form-control" id="precio" type="number" name="precio" min="0.00" max="10000.00" step="0.01" placeholder="144.00" required>
-                                </div>
-                            </div>
+                    <form id="form" class="max-w-sm" method="post" onsubmit="calcular()">
+                        <label for="basic-url" class="block mb-2 text-sm font-medium text-gray-900">¿Cuanto se va a cobrar por horas?</label>
+                        <div class="flex">
+                            <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">$</span>
+                            <input class="rounded-none rounded-e-lg border border-blue-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5" id="precio" type="number" name="precio" min="0.00" max="10000.00" step="0.01" placeholder="144.00" required>
                         </div>
                         <div id="fechas">
-                            <div class="row mb-3">
-                                <div class="col col-sm-3">
-                                    <div class="row">
-                                        <label for="inputDate1" class="col-sm-2 col-form-label">Fecha:</label>
-                                        <div class="col-sm-8">
-                                            <input class="form-control" type="date" name="fecha" value="" for="inputDate1" required />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col col-sm-3">
-                                    <div class="row">
-                                        <label for="inputDate1" class="col-sm-4 col-form-label">Hora inicial:</label>
-                                        <div class="col-sm-4">
-                                            <input class="form-control" type="time" name="hora_inicial" value="" required />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col col-sm-3">
-                                    <div class="row">
-                                        <label for="inputDate1" class="col-sm-4 col-form-label">Hora final:</label> 
-                                        <div class="col-sm-4">
-                                            <input class="form-control" type="time" name="hora_final" value="" required />
-                                        </div>  
-                                    </div>
-                                </div>
-                                <button class="btn btn-primary col col-md-1" id="add" onclick="adicionar()">+</button>
+                        <div class="-mx-3 md:flex my-3">
+                            <div class="md:w-1/2 px-3 mb-6 md:mb-0">
+                              <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-city">
+                                Fecha
+                              </label>
+                              <input name="fecha" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4" id="grid-city" type="date" placeholder="dd/mm/YYY">
                             </div>
-
+                            <div class="md:w-1/2 px-3">
+                              <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-state">
+                                Hora Inicio
+                              </label>
+                              <input name="hora_inicial" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4" id="grid-zip" type="time" placeholder="08:00">
                             </div>
-                        <button class="btn btn-primary" type="submit">Calcular</button>
+                            <div class="md:w-1/2 px-3">
+                              <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-zip">
+                                Hora Final
+                              </label>
+                              <input name="hora_final" class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4" id="grid-zip" type="time" placeholder="08:00">
+                            </div>
+                            <div class="md:w-1/2 px-3 grid grid-cols-3 gap-4 content-end">
+                                <button class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" id="add" onclick="adicionar()">+</button>
+                            </div>
+                          </div>
+                        <button class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" type="submit">Calcular</button>
                     </form>
                 </div>
                 <br />
-                <div>
-                    <table class="table table-striped visually-hidden" id="tabla">
-                        <thead>
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 invisible" id="tabla">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                             <tr class="">
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Tiempo (hh:mm)</th>
-                                <th scope="col">a Cobrar</th>
+                                <th scope="col" class="px-6 py-3 rounded-s-lg">Fecha</th>
+                                <th scope="col" class="px-6 py-3">Horas</th>
+                                <th scope="col" class="px-6 py-3 rounded-e-lg">a Cobrar</th>
                             </tr>
                         </thead>
-                        <tbody id="cobro" class="table-group-divider">
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                        <tbody id="cobro">
+                            <tr class="bg-white border-b ">
+                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white""></td>
+                                <td class="px-6 py-4"></td>
+                                <td class="px-6 py-4"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -93,7 +84,7 @@
                                 <div class="row"> \
                                     <label for="inputDate1" class="col-sm-2 col-form-label">Fecha:</label> \
                                     <div class="col-sm-8"> \
-                                        <input class="form-control" type="date" name="fecha" value="" for="inputDate1" required /> \
+                                        <input class="form-control" type="date" name="fecha" value="2024-11-02" for="inputDate1" required /> \
                                     </div> \
                                 </div> \
                             </div> \
@@ -101,7 +92,7 @@
                                 <div class="row"> \
                                     <label for="inputDate1" class="col-sm-4 col-form-label">Hora inicial:</label> \
                                     <div class="col-sm-4">\
-                                        <input class="form-control" type="time" name="hora_inicial" value="" required /> \
+                                        <input class="form-control" type="time" name="hora_inicial" value="08:23" required /> \
                                     </div>\
                                 </div> \
                             </div> \
@@ -109,7 +100,7 @@
                                 <div class="row"> \
                                     <label for="inputDate1" class="col-sm-4 col-form-label">Hora final:</label> \
                                     <div class="col-sm-4"> \
-                                        <input class="form-control" type="time" name="hora_final" value="" required /> \
+                                        <input class="form-control" type="time" name="hora_final" value="14:34" required /> \
                                     </div>  \
                                 </div> \
                             </div> \
@@ -131,21 +122,6 @@
             // agregar al final de los hijos del div='fechas'
             additionalInputs.appendChild(newDiv);
         }
-
-        function msToTime(duration) {
-            let milliseconds = Math.floor((duration % 1000) / 100),
-                // seconds = Math.floor((duration / 1000) % 60),
-                minutes = Math.floor((duration / (1000 * 60)) % 60),
-                hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
-
-            hours = (hours < 10) ? "0" + hours : hours;
-            minutes = (minutes < 10) ? "0" + minutes : minutes;
-            // seconds = (seconds < 10) ? "0" + seconds : seconds;
-
-            // return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
-            return hours + ":" + minutes;
-        }
-
 
         // función para convertir los string 'fecha' y 'hora' en formato fecha
         function newDate(date, hora) {
@@ -220,6 +196,7 @@
 
             // crear un div para mostrar los cálculos por fechas
             nuevo_div = document.createElement('tr')
+            nuevo_div.classList.add("bg-white", "border-b", "hover:bg-gray-50")
 
             // iterar por las fechas iniciales para calcular y agregar el resultado
             // para mostrarlo
@@ -227,7 +204,6 @@
 
                 // se calculan las horas trabajadas
                 resta_horas = (horas_finales[i] - h) / 1000 / 60 / 60
-                resta_horas_mostrar = msToTime(horas_finales[i] - h)
 
                 // de la fecha se separan dia, mes y año para formar dd/mm/yyyy
                 const dia = fechas[i].getDate()
@@ -241,23 +217,23 @@
 
                 // ir sumando los precios parciales
                 suma_final_precio = suma(suma_final_precio, precio_parcial[i])
-                // console.log(`debes restar horas_finales: ${horas_finales[i]} - horas_iniciales: ${horas_iniciales[i]} = ${resta_horas}, multi por el precio ${precio}`)
+                console.log(`debes restar horas_finales: ${horas_finales[i]} - horas_iniciales: ${horas_iniciales[i]} = ${resta_horas}, multi por el precio ${precio}`)
 
-                precio_parcial_formateado = new Intl.NumberFormat("en-US", {minimumFractionDigits: 2,}).format(precio_parcial[i])
-                suma_final_precio_formateada = new Intl.NumberFormat("en-US", {minimumFractionDigits: 2,}).format(suma_final_precio)
+                precio_parcial_formateado = new Intl.NumberFormat("en-US").format(precio_parcial[i])
+
                 // generar el texto a mostrar, ${precio_parcial[i].toFixed(2)}
-                nuevo_div.innerHTML = `<td>${fecha_a_mostrar}</td><td>${resta_horas_mostrar}</td><td>$ ${precio_parcial_formateado}</td>`
+                nuevo_div.innerHTML = `<td class='px-6 py-4'>${fecha_a_mostrar}</td><td class='px-6 py-4'>${resta_horas.toFixed(2)}</td><td class='px-6 py-4'>$ ${precio_parcial_formateado}</td>`
 
                 // mostrar el texto
                 cobro.appendChild(nuevo_div.cloneNode(true))
-                cobro.classList.remove('visually-hidden')
+                cobro.classList.remove('invisible')
             })
             
             // agregar el precio total
-            nuevo_div.innerHTML = `<td colspan='3' class='text-end'>Total a cobrar: <b>$ ${suma_final_precio_formateada}</b></td>`
+            nuevo_div.innerHTML = `<td class='px-6 py-4'></td><td class='px-6 py-4 text-right'>Total a cobrar: </td><td class='px-6 py-4'><b>$ ${suma_final_precio}</b></td>`
             cobro.appendChild(nuevo_div.cloneNode(true))
 
-            tabla.classList.remove('visually-hidden')
+            tabla.classList.remove('invisible')
             // console.log('-------- salí del for, resultado de los arreglos --------- ')
             // console.log('las fechas: ', fechas)
             // console.log('las horas_iniciales: ', horas_iniciales)
